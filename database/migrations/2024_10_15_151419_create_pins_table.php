@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pins', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('code', 40)->unique();
+            $table->string('used')->default(0);
+            $table->string('times_used')->default(0);
+            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('student_id')->nullable();
             $table->timestamps();
         });
     }

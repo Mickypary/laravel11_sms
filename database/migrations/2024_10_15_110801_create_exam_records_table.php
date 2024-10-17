@@ -12,7 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_records', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->unsignedInteger('exam_id');
+            $table->unsignedInteger('student_id');
+            $table->unsignedInteger('my_class_id');
+            $table->unsignedInteger('section_id');
+            $table->integer('total')->nullable();
+            $table->string('ave')->nullable();
+            $table->string('class_ave')->nullable();
+            $table->integer('pos')->nullable();
+            $table->string('af')->nullable();
+            $table->string('ps')->nullable();
+            $table->string('p_comment')->nullable();
+            $table->string('t_comment')->nullable();
+            $table->string('year');
             $table->timestamps();
         });
     }

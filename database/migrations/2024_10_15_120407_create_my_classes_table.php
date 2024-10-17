@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('my_classes', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('name', 100);
+            $table->unsignedInteger('class_type_id')->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('my_classes', function (Blueprint $table) {
+            $table->unique(['class_type_id', 'name']);
         });
     }
 

@@ -12,8 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('subjects', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('name', 100);
+            $table->string('slug', 100);
+            $table->unsignedInteger('my_class_id');
+            $table->unsignedInteger('teacher_id');
             $table->timestamps();
+        });
+
+        Schema::table('subjects', function (Blueprint $table) {
+            $table->unique(['my_class_id', 'name']);
         });
     }
 

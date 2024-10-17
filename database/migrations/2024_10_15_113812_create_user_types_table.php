@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_types', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('title');
+            $table->string('name');
+            $table->string('level');
             $table->timestamps();
         });
     }

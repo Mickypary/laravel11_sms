@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('name');
             $table->string('email', 100)->unique()->nullable();
             $table->string('code', 100)->unique();
@@ -24,10 +24,10 @@ return new class extends Migration
             $table->string('photo')->default(Qs::getDefaultUserImage());
             $table->string('phone')->nullable();
             $table->string('phone2')->nullable();
-            $table->unsignedBigInteger('bg_id')->nullable();
-            $table->unsignedBigInteger('state_id')->nullable();
-            $table->unsignedBigInteger('lga_id')->nullable();
-            $table->unsignedBigInteger('nal_id')->nullable();
+            $table->unsignedInteger('bg_id')->nullable();
+            $table->unsignedInteger('state_id')->nullable();
+            $table->unsignedInteger('lga_id')->nullable();
+            $table->unsignedInteger('nal_id')->nullable();
             $table->string('address')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\MyParent\MyController;
 use App\Http\Controllers\SupportTeam\UserController;
 use App\Http\Controllers\SupportTeam\MyClassController;
 use App\Http\Controllers\SupportTeam\SectionController;
@@ -13,6 +14,8 @@ use App\Http\Controllers\SupportTeam\GradeController;
 use App\Http\Controllers\SupportTeam\MarkController;
 use App\Http\Controllers\SupportTeam\SubjectController;
 use App\Http\Controllers\SupportTeam\DormController;
+use App\Http\Controllers\SupportTeam\PromotionController;
+use App\Http\Controllers\SupportTeam\PaymentController;
 use App\Http\Controllers\SuperAdmin\SettingController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\MyAccountController;
@@ -48,18 +51,18 @@ Route::group(['middleware' => 'auth'], function () {
 
     /*************** Students *****************/
     Route::group(['prefix' => 'students'], function () {
-        Route::get('reset_pass/{st_id}', 'StudentRecordController@reset_pass')->name('st.reset_pass');
-        Route::get('graduated', 'StudentRecordController@graduated')->name('students.graduated');
-        Route::put('not_graduated/{id}', 'StudentRecordController@not_graduated')->name('st.not_graduated');
-        Route::get('list/{class_id}', 'StudentRecordController@listByClass')->name('students.list')->middleware('teamSAT');
+        Route::get('reset_pass/{st_id}', [StudentRecordController::class, 'reset_pass'])->name('st.reset_pass');
+        Route::get('graduated', [StudentRecordController::class, 'graduated'])->name('students.graduated');
+        Route::put('not_graduated/{id}', [StudentRecordController::class, 'not_graduated'])->name('st.not_graduated');
+        Route::get('list/{class_id}', [StudentRecordController::class, 'listByClass'])->name('students.list')->middleware('teamSAT');
 
         /* Promotions */
-        Route::post('promote_selector', 'PromotionController@selector')->name('students.promote_selector');
-        Route::get('promotion/manage', 'PromotionController@manage')->name('students.promotion_manage');
-        Route::delete('promotion/reset/{pid}', 'PromotionController@reset')->name('students.promotion_reset');
-        Route::delete('promotion/reset_all', 'PromotionController@reset_all')->name('students.promotion_reset_all');
-        Route::get('promotion/{fc?}/{fs?}/{tc?}/{ts?}', 'PromotionController@promotion')->name('students.promotion');
-        Route::post('promote/{fc}/{fs}/{tc}/{ts}', 'PromotionController@promote')->name('students.promote');
+        Route::post('promote_selector', [PromotionController::class, 'selector'])->name('students.promote_selector');
+        Route::get('promotion/manage', [PromotionController::class, 'manage'])->name('students.promotion_manage');
+        Route::delete('promotion/reset/{pid}', [PromotionController::class, 'reset'])->name('students.promotion_reset');
+        Route::delete('promotion/reset_all', [PromotionController::class, 'reset_all'])->name('students.promotion_reset_all');
+        Route::get('promotion/{fc?}/{fs?}/{tc?}/{ts?}', [PromotionController::class, 'promotion'])->name('students.promotion');
+        Route::post('promote/{fc}/{fs}/{tc}/{ts}', [PromotionController::class, 'promote'])->name('students.promote');
     });
 
     /*************** Users *****************/
@@ -105,14 +108,14 @@ Route::group(['middleware' => 'auth'], function () {
     /*************** Payments *****************/
     Route::group(['prefix' => 'payments'], function () {
 
-        Route::get('manage/{class_id?}', 'PaymentController@manage')->name('payments.manage');
-        Route::get('invoice/{id}/{year?}', 'PaymentController@invoice')->name('payments.invoice');
-        Route::get('receipts/{id}', 'PaymentController@receipts')->name('payments.receipts');
-        Route::get('pdf_receipts/{id}', 'PaymentController@pdf_receipts')->name('payments.pdf_receipts');
-        Route::post('select_year', 'PaymentController@select_year')->name('payments.select_year');
-        Route::post('select_class', 'PaymentController@select_class')->name('payments.select_class');
-        Route::delete('reset_record/{id}', 'PaymentController@reset_record')->name('payments.reset_record');
-        Route::post('pay_now/{id}', 'PaymentController@pay_now')->name('payments.pay_now');
+        Route::get('manage/{class_id?}', [PaymentController::class, 'manage'])->name('payments.manage');
+        Route::get('invoice/{id}/{year?}', [PaymentController::class, 'invoice'])->name('payments.invoice');
+        Route::get('receipts/{id}', [PaymentController::class, 'receipts'])->name('payments.receipts');
+        Route::get('pdf_receipts/{id}', [PaymentController::class, 'pdf_receipts'])->name('payments.pdf_receipts');
+        Route::post('select_year', [PaymentController::class, 'select_year'])->name('payments.select_year');
+        Route::post('select_class', [PaymentController::class, 'select_class'])->name('payments.select_class');
+        Route::delete('reset_record/{id}', [PaymentController::class, 'reset_record'])->name('payments.reset_record');
+        Route::post('pay_now/{id}', [PaymentController::class, 'pay_now'])->name('payments.pay_now');
     });
 
     /*************** Pins *****************/
@@ -163,7 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('grades', GradeController::class);
     Route::resource('exams', ExamController::class);
     Route::resource('dorms', DormController::class);
-    Route::resource('payments', 'PaymentController');
+    Route::resource('payments', PaymentController::class);
 
 
     /************************ AJAX ****************************/
@@ -185,5 +188,5 @@ Route::group(['middleware' => 'super_admin', 'prefix' => 'super_admin'], functio
 /************************ PARENT ****************************/
 Route::group(['namespace' => 'MyParent', 'middleware' => 'my_parent',], function () {
 
-    Route::get('/my_children', 'MyController@children')->name('my_children');
+    Route::get('/my_children', [MyController::class, 'children'])->name('my_children');
 });

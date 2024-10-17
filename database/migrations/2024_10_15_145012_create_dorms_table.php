@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dorms', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('name', 100)->unique();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

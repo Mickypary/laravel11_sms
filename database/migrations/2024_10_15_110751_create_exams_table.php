@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exams', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('name');
+            $table->tinyInteger('term');
+            $table->string('year', 40);
             $table->timestamps();
+        });
+
+        Schema::table('exams', function (Blueprint $table) {
+            $table->unique(['term', 'year']);
         });
     }
 

@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lgas', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->unsignedInteger('state_id');
+            $table->string('name');
             $table->timestamps();
         });
     }

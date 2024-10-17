@@ -12,7 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payment_records', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->unsignedInteger('payment_id');
+            $table->unsignedInteger('student_id');
+            $table->string('ref_no', 100)->unique()->nullable();
+            $table->integer('amt_paid')->nullable();
+            $table->integer('balance')->nullable();
+            $table->tinyInteger('paid')->default(0);
+            $table->string('year');
             $table->timestamps();
         });
     }
