@@ -43,21 +43,25 @@ class MarkController extends Controller
 
     public function year_selector($student_id)
     {
-        return $this->verifyStudentExamYear($student_id);
+        // dd($student_id);
+        // decodeHash
+        return $this->verifyStudentExamYear(Qs::decodeHash($student_id));
     }
 
     public function year_selected(Request $req, $student_id)
     {
-        if (!$this->verifyStudentExamYear($student_id, $req->year)) {
+        if (!$this->verifyStudentExamYear(Qs::decodeHash($student_id), $req->year)) {
             return $this->noStudentRecord();
         }
 
-        $student_id = Qs::hash($student_id);
+        $student_id = Qs::decodeHash($student_id);
+        // dd($student_id);
         return redirect()->route('marks.show', [$student_id, $req->year]);
     }
 
     public function show($student_id, $year)
     {
+        // dd($student_id);
         /* Prevent Other Students/Parents from viewing Result of others */
         if (Auth::user()->id != $student_id && !Qs::userIsTeamSAT() && !Qs::userIsMyChild($student_id, Auth::user()->id)) {
             return redirect(route('dashboard'))->with('pop_error', __('msg.denied'));
@@ -94,37 +98,38 @@ class MarkController extends Controller
 
     public function print_view($student_id, $exam_id, $year)
     {
+        // dd($student_id);
         /* Prevent Other Students/Parents from viewing Result of others */
-        if (Auth::user()->id != $student_id && !Qs::userIsTeamSA() && !Qs::userIsMyChild($student_id, Auth::user()->id)) {
+        if (Auth::user()->id != Qs::decodeHash($student_id) && !Qs::userIsTeamSA() && !Qs::userIsMyChild(Qs::decodeHash($student_id), Auth::user()->id)) {
             return redirect(route('dashboard'))->with('pop_error', __('msg.denied'));
         }
 
         if (Mk::examIsLocked() && !Qs::userIsTeamSA()) {
             Session::put('marks_url', route('marks.show', [Qs::hash($student_id), $year]));
 
-            if (!$this->checkPinVerified($student_id)) {
-                return redirect()->route('pins.enter', Qs::hash($student_id));
+            if (!$this->checkPinVerified(Qs::decodeHash($student_id))) {
+                return redirect()->route('pins.enter', Qs::decodeHash($student_id));
             }
         }
 
-        if (!$this->verifyStudentExamYear($student_id, $year)) {
+        if (!$this->verifyStudentExamYear(Qs::decodeHash($student_id), $year)) {
             return $this->noStudentRecord();
         }
 
-        $wh = ['student_id' => $student_id, 'exam_id' => $exam_id, 'year' => $year];
+        $wh = ['student_id' => Qs::decodeHash($student_id), 'exam_id' => $exam_id, 'year' => $year];
         $d['marks'] = $mks = $this->exam->getMark($wh);
         $d['exr'] = $exr = $this->exam->getRecord($wh)->first();
         $d['my_class'] = $mc = $this->my_class->find($exr->my_class_id);
         $d['section_id'] = $exr->section_id;
         $d['ex'] = $exam = $this->exam->find($exam_id);
         $d['tex'] = 'tex' . $exam->term;
-        $d['sr'] = $sr = $this->student->getRecord(['user_id' => $student_id])->first();
+        $d['sr'] = $sr = $this->student->getRecord(['user_id' => Qs::decodeHash($student_id)])->first();
         $d['class_type'] = $this->my_class->findTypeByClass($mc->id);
         $d['subjects'] = $this->my_class->findSubjectByClass($mc->id);
 
         $d['ct'] = $ct = $d['class_type']->code;
         $d['year'] = $year;
-        $d['student_id'] = $student_id;
+        $d['student_id'] = Qs::decodeHash($student_id);
         $d['exam_id'] = $exam_id;
 
         $d['skills'] = $this->exam->getSkillByClassType() ?: NULL;
@@ -343,6 +348,7 @@ class MarkController extends Controller
         $d['selected'] = false;
 
         if ($class_id && $section_id) {
+
             $d['sections'] = $this->my_class->getAllSections()->where('my_class_id', $class_id);
             $d['students'] = $st = $this->student->getRecord(['my_class_id' => $class_id, 'section_id' => $section_id])->get()->sortBy('user.name');
             if ($st->count() < 1) {
@@ -442,6 +448,7 @@ class MarkController extends Controller
 
     protected function verifyStudentExamYear($student_id, $year = null)
     {
+        // dd($student_id);
         $years = $this->exam->getExamYears($student_id);
         $student_exists = $this->student->exists($student_id);
 

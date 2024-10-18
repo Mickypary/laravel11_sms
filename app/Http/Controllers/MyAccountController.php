@@ -31,7 +31,7 @@ class MyAccountController extends Controller
         $user = Auth::user();
         // dd($req->only(['email', 'phone', 'address']));
 
-        $d = $user->username ? $req->only(['email', 'phone', 'address']) : $req->only(['email', 'phone', 'address', 'username']);
+        $d = $user->username ? $req->only(['email', 'phone', 'phone2', 'address']) : $req->only(['email', 'phone', 'phone2', 'address', 'username']);
 
         if (!$user->username && !$req->username && !$req->email) {
             return back()->with('pop_error', __('msg.user_invalid'));

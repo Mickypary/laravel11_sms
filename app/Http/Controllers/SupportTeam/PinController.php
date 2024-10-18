@@ -43,14 +43,15 @@ class PinController extends Controller
 
     public function enter_pin($student_id)
     {
+        // dd($student_id);
         if (Qs::userIsTeamSA()) {
             return redirect(route('dashboard'));
         }
 
-        if ($this->checkPinVerified($student_id)) {
+        if ($this->checkPinVerified(Qs::decodeHash($student_id))) {
             return Session::has('marks_url') ? redirect(Session::get('marks_url')) : redirect()->route('dashboard');
         }
-        $d['student'] = $this->user->find($student_id);
+        $d['student'] = $this->user->find(Qs::decodeHash($student_id));
 
         return view('pages.support_team.pins.enter', $d);
     }
@@ -60,18 +61,18 @@ class PinController extends Controller
         $user = Auth::user();
         $code = $this->pin->findValidCode($req->pin_code);
         if ($code->count() < 1) {
-            $code = $this->pin->getUserPin($req->pin_code, $user->id, $student_id);
+            $code = $this->pin->getUserPin($req->pin_code, $user->id, Qs::decodeHash($student_id));
         }
         if ($code->count() > 0 && $code->first()->times_used < 6) {
             $code = $code->first();
             $d['times_used'] = $code->times_used + 1;
             $d['user_id'] = $user->id;
-            $d['student_id'] = $student_id;
+            $d['student_id'] = Qs::decodeHash($student_id);
             $d['user_type'] = $user->user_type;
             $d['used'] = 1;
             $this->pin->update($code->id, $d);
 
-            Session::put('pin_verified', $student_id);
+            Session::put('pin_verified', Qs::decodeHash($student_id));
 
             return Session::has('marks_url') ? redirect(Session::get('marks_url')) : redirect()->route('dashboard');
         }

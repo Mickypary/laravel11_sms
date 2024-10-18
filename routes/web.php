@@ -16,6 +16,7 @@ use App\Http\Controllers\SupportTeam\SubjectController;
 use App\Http\Controllers\SupportTeam\DormController;
 use App\Http\Controllers\SupportTeam\PromotionController;
 use App\Http\Controllers\SupportTeam\PaymentController;
+use App\Http\Controllers\SupportTeam\TimeTableController;
 use App\Http\Controllers\SuperAdmin\SettingController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\MyAccountController;
@@ -72,36 +73,36 @@ Route::group(['middleware' => 'auth'], function () {
 
     /*************** TimeTables *****************/
     Route::group(['prefix' => 'timetables'], function () {
-        Route::get('/', 'TimeTableController@index')->name('tt.index');
+        Route::get('/', [TimeTableController::class, 'index'])->name('tt.index');
 
         Route::group(['middleware' => 'teamSA'], function () {
-            Route::post('/', 'TimeTableController@store')->name('tt.store');
-            Route::put('/{tt}', 'TimeTableController@update')->name('tt.update');
-            Route::delete('/{tt}', 'TimeTableController@delete')->name('tt.delete');
+            Route::post('/', [TimeTableController::class, 'store'])->name('tt.store');
+            Route::put('/{tt}', [TimeTableController::class, 'update'])->name('tt.update');
+            Route::delete('/{tt}', [TimeTableController::class, 'delete'])->name('tt.delete');
         });
 
         /*************** TimeTable Records *****************/
         Route::group(['prefix' => 'records'], function () {
 
             Route::group(['middleware' => 'teamSA'], function () {
-                Route::get('manage/{ttr}', 'TimeTableController@manage')->name('ttr.manage');
-                Route::post('/', 'TimeTableController@store_record')->name('ttr.store');
-                Route::get('edit/{ttr}', 'TimeTableController@edit_record')->name('ttr.edit');
-                Route::put('/{ttr}', 'TimeTableController@update_record')->name('ttr.update');
+                Route::get('manage/{ttr}', [TimeTableController::class, 'manage'])->name('ttr.manage');
+                Route::post('/', [TimeTableController::class, 'store_record'])->name('ttr.store');
+                Route::get('edit/{ttr}', [TimeTableController::class, 'edit_record'])->name('ttr.edit');
+                Route::put('/{ttr}', [TimeTableController::class, 'update_record'])->name('ttr.update');
             });
 
-            Route::get('show/{ttr}', 'TimeTableController@show_record')->name('ttr.show');
-            Route::get('print/{ttr}', 'TimeTableController@print_record')->name('ttr.print');
-            Route::delete('/{ttr}', 'TimeTableController@delete_record')->name('ttr.destroy');
+            Route::get('show/{ttr}', [TimeTableController::class, 'show_record'])->name('ttr.show');
+            Route::get('print/{ttr}', [TimeTableController::class, 'print_record'])->name('ttr.print');
+            Route::delete('/{ttr}', [TimeTableController::class, 'delete_record'])->name('ttr.destroy');
         });
 
         /*************** Time Slots *****************/
         Route::group(['prefix' => 'time_slots', 'middleware' => 'teamSA'], function () {
-            Route::post('/', 'TimeTableController@store_time_slot')->name('ts.store');
-            Route::post('/use/{ttr}', 'TimeTableController@use_time_slot')->name('ts.use');
-            Route::get('edit/{ts}', 'TimeTableController@edit_time_slot')->name('ts.edit');
-            Route::delete('/{ts}', 'TimeTableController@delete_time_slot')->name('ts.destroy');
-            Route::put('/{ts}', 'TimeTableController@update_time_slot')->name('ts.update');
+            Route::post('/', [TimeTableController::class, 'store_time_slot'])->name('ts.store');
+            Route::post('/use/{ttr}', [TimeTableController::class, 'use_time_slot'])->name('ts.use');
+            Route::get('edit/{ts}', [TimeTableController::class, 'edit_time_slot'])->name('ts.edit');
+            Route::delete('/{ts}', [TimeTableController::class, 'delete_time_slot'])->name('ts.destroy');
+            Route::put('/{ts}', [TimeTableController::class, 'update_time_slot'])->name('ts.update');
         });
     });
 

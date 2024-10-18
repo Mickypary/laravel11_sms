@@ -53,8 +53,11 @@ class SettingController extends Controller
             $logo = $req->file('logo');
             $f = Qs::getFileMetaData($logo);
             $f['name'] = 'logo.' . $f['ext'];
-            $f['path'] = $logo->storeAs(Qs::getPublicUploadPath(), $f['name']);
-            $logo_path = asset('storage/' . $f['path']);
+            // $f['path'] = $logo->storeAs(Qs::getPublicUploadPath(), $f['name']);
+            // $logo_path = asset('storage/' . $f['path']);
+            $logo_path = 'uploads/logo/' . $f['name'];
+            unlink($logo_path);
+            $logo->move('uploads/logo/', $f['name']);
             $this->setting->update('logo', $logo_path);
         }
 
