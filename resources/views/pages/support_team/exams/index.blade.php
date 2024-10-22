@@ -93,6 +93,14 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group row">
+                                    <label for="term" class="col-lg-3 col-form-label font-weight-semibold"></label>
+                                    <div class="col-lg-9">
+                                        <input type="checkbox" name="mid" id="mid" value="on">
+                                        <label for="mid">IsMid</label>
+                                    </div>
+                                </div>
+
                                 <div class="text-right">
                                     <button type="submit" class="btn btn-primary">Submit form <i class="icon-paperplane ml-2"></i></button>
                                 </div>

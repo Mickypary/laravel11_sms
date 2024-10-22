@@ -39,8 +39,11 @@ class Mk extends Qs
   {
     $d = ['student_id' => $st_id, 'subject_id' => $sub_id, 'my_class_id' => $class_id, 'year' => $year];
 
-    $tex = 'tex' . $term;
+    // $tex = 'tex' . $term;
+    $tex = 'end' . $term . 'total';
+
     $sub_total = Mark::where($d)->select($tex)->get()->where($tex, '>', 0);
+    // print_r($sub_total);
     return $sub_total->count() > 0 ? $sub_total->first()->$tex : '-';
   }
 

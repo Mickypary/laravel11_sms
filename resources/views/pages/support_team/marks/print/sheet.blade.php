@@ -8,7 +8,12 @@
       <td><strong>CLASS:</strong> {{ strtoupper($my_class->name) }}</td>
   </tr>
   <tr>
-      <td><strong>REPORT SHEET FOR</strong> {!! strtoupper(Mk::getSuffix($ex->term)) !!} TERM </td>
+    @if($ex->term === 4)
+    <td><strong>REPORT SHEET FOR</strong> Mid TERM </td>
+    @else 
+    <td><strong>REPORT SHEET FOR</strong> {!! strtoupper(Mk::getSuffix($ex->term)) !!} TERM </td>
+    @endif
+      
       <td><strong>ACADEMIC YEAR:</strong> {{ $ex->year }}</td>
       <td><strong>AGE:</strong> {{ $sr->age ?: ($sr->user->dob ? date_diff(date_create($sr->user->dob), date_create('now'))->y : '-') }}</td>
   </tr>
@@ -54,7 +59,12 @@
               <td>{{ $mk->t1 ?: '-' }}</td>
               <td>{{ $mk->t2 ?: '-' }}</td>
               <td>{{ $mk->tca ?: '-' }}</td>
+              @if($ex->term === 4) 
+              <td>{{ $mk->mid ?: '-' }}</td>
+              @else 
               <td>{{ $mk->exm ?: '-' }}</td>
+              @endif
+              
 
               <td>{{ $mk->$tex ?: '-'}}</td>
               <td>{{ $mk->grade ? $mk->grade->name : '-' }}</td>

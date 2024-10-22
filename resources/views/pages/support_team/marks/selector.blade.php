@@ -57,12 +57,12 @@
 
           </fieldset>
       </div>
-
       <div class="col-md-2 mt-4">
           <div class="text-right mt-1">
               <button type="submit" class="btn btn-primary">Manage Marks <i class="icon-paperplane ml-2"></i></button>
-          </div>
-      </div>
+            </div>
+        </div>
+        <span class="text-danger">To update Total Score, click on manage marks again after updating marks</span>
 
   </div>
 

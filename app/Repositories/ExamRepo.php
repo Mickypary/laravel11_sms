@@ -31,6 +31,7 @@ class ExamRepo
     return Exam::create($data);
   }
 
+  // Create record in Exam Record Table
   public function createRecord($data)
   {
     return ExamRecord::firstOrCreate($data);
@@ -95,6 +96,7 @@ class ExamRepo
 
   /*********** Marks ***************/
 
+  // Populate Student Record in Mark Table in readiness for Mark Entry
   public function createMark($data)
   {
     return Mark::firstOrCreate($data);

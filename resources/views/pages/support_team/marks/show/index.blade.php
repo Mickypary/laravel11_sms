@@ -1,3 +1,4 @@
+
 @extends('layouts.master')
 @section('page_title', 'Student Marksheet')
 @section('content')
@@ -10,6 +11,7 @@
 
     @foreach($exams as $ex)
         @foreach($exam_records->where('exam_id', $ex->id) as $exr)
+        
 
                 <div class="card">
                     <div class="card-header header-elements-inline">
