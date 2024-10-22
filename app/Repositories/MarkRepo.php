@@ -15,7 +15,7 @@ class MarkRepo
     }
 
     $grades = Grade::where(['class_type_id' => $class_type_id])->get();
-    // dd('pary');
+
 
     if ($grades->count() > 0) {
       $gr = $grades->where('mark_from', '<=', $total)->where('mark_to', '>=', $total);
@@ -27,9 +27,10 @@ class MarkRepo
   public function getGrade2($total)
   {
     $grades = Grade::whereNull('class_type_id')->get();
+    // dd($grades);
 
     if ($grades->count() > 0) {
-      return $grades->where('mark_from', '<=', $total)->where('mark_to', '>=', $total)->first();
+      return $grades->where('mark_from', '<=', $total)->where('mark_to', '>=', $total)->first()->id;
     }
     return NULL;
   }
@@ -171,9 +172,9 @@ class MarkRepo
     // dd($my_mk);
 
 
-    /*if($exam->term == 3){
-            $my_mk = Mark::where($d)->select('cum')->sum('cum');
-        }*/
+    if ($exam->term == 3) {
+      $my_mk = Mark::where($d)->select('cum')->sum('cum');
+    }
 
     unset($d['student_id']);
 

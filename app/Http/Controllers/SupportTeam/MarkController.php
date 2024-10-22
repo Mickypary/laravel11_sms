@@ -55,7 +55,6 @@ class MarkController extends Controller
         }
 
         $student_id = Qs::decodeHash($student_id);
-        // dd($student_id);
         return redirect()->route('marks.show', [$student_id, $req->year]);
     }
 
@@ -183,11 +182,9 @@ class MarkController extends Controller
         // For Total column show
         $exam_term = $this->exam->find($exam_id)->term;
         $d['tex'] =  'mid' . $exam_term . 'total';
-        // dd('pary');
         // $d['tex'] =  'tex' . $exam_term;
 
         $d['m'] =  $d['marks']->first();
-        // dd($d['m']);
         $d['exams'] = $this->exam->all();
         $d['my_classes'] = $this->my_class->all();
         $d['sections'] = $this->my_class->getAllSections();
@@ -255,7 +252,6 @@ class MarkController extends Controller
             // dd($total);
             if ($exam->term == 3) {
                 $d['cum'] = $this->mark->getSubCumTotal($total, $mk->student_id, $subject_id, $class_id, $this->year);
-                // dd($d['cum']);
                 $d['cum_ave'] = $cav = $this->mark->getSubCumAvg($total, $mk->student_id, $subject_id, $class_id, $this->year);
                 $grade = $this->mark->getGrade(round($cav), $class_type->id);
             }
@@ -336,24 +332,24 @@ class MarkController extends Controller
         /** Marks Fix Begin **/
 
         $class_type = $this->my_class->findTypeByClass($class_id);
-        $tex = 'tex' . $exam->term;
+        // $tex = 'tex' . $exam->term;
+        $tex = 'end' . $exam->term . 'total';
         // dd($class_type->id);
 
         foreach ($marks as $mk) {
 
             $total = $mk->$tex;
-            // $d['grade_id'] = $this->mark->getGrade($total, $class_type->id);
-            $d['grade_id'] = $this->mark->getGrade($total, $class_type->id)->id;
+            $d['grade_id'] = $this->mark->getGrade($total, $class_type->id);
+
             // dd($d['grade_id']);
 
-            /*      if($exam->term == 3){
-                      $d['cum'] = $this->mark->getSubCumTotal($total, $mk->student_id, $mk->subject_id, $class_id, $this->year);
-                      $d['cum_ave'] = $cav = $this->mark->getSubCumAvg($total, $mk->student_id, $mk->subject_id, $class_id, $this->year);
-                      $grade = $this->mark->getGrade(round($mk->cum_ave), $class_type->id);
-                  }*/
+            if ($exam->term == 3) {
+                $d['cum'] = $this->mark->getSubCumTotal($total, $mk->student_id, $mk->subject_id, $class_id, $this->year);
+                $d['cum_ave'] = $cav = $this->mark->getSubCumAvg($total, $mk->student_id, $mk->subject_id, $class_id, $this->year);
+                $grade = $this->mark->getGrade(round($mk->cum_ave), $class_type->id);
+            }
 
-            $check = $this->exam->updateMark($mk->id, $d);
-            // dd($check);
+            $this->exam->updateMark($mk->id, $d);
         }
 
         /* Marks Fix End*/
