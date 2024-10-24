@@ -22,9 +22,9 @@ use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\MyAccountController;
 use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy_policy');
 Route::get('/terms-of-use', [HomeController::class, 'terms_of_use'])->name('terms_of_use');

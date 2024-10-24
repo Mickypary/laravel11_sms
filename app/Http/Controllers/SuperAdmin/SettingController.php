@@ -45,6 +45,7 @@ class SettingController extends Controller
         $sets['lock_exam'] = $sets['lock_exam'] == 1 ? 1 : 0;
         $keys = array_keys($sets);
         $values = array_values($sets);
+        // dd($keys);
         for ($i = 0; $i < count($sets); $i++) {
             $this->setting->update($keys[$i], $values[$i]);
         }
@@ -53,13 +54,12 @@ class SettingController extends Controller
             $logo = $req->file('logo');
             $f = Qs::getFileMetaData($logo);
             $f['name'] = 'logo.' . $f['ext'];
-            // $f['path'] = $logo->storeAs(Qs::getPublicUploadPath(), $f['name']);
-            // $logo_path = asset('storage/' . $f['path']);
-            $logo_path = 'uploads/logo/' . $f['name'];
-            unlink($logo_path);
-            $logo->move('uploads/logo/', $f['name']);
+            $f['path'] = $logo->storeAs(Qs::getPublicUploadPath(), $f['name']);
+            $logo_path = asset('storage/' . $f['path']);
             $this->setting->update('logo', $logo_path);
         }
+
+
 
         return back()->with('flash_success', __('msg.update_ok'));
     }
