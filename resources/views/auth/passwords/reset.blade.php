@@ -23,10 +23,11 @@
                         </div>
 
                         <div class="card-body">
-                            <form method="POST" action="{{ route('password.update') }}">
+                            <form method="POST" action="{{ route('password.update',) }}">
                                 @csrf
 
                                 <input type="hidden" name="token" value="{{ $token }}">
+                                <input type="hidden" name="email" value="{{ $email }}">
 
                                 <div class="form-group row">
                                     <label for="email"
@@ -56,8 +57,8 @@
 
                                         @if ($errors->has('password'))
                                             <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
+                                                <strong>{{ $errors->first('password') }}</strong>
+                                            </span>
                                         @endif
                                     </div>
                                 </div>

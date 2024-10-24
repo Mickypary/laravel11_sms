@@ -35,7 +35,11 @@ Route::get('/terms-of-use', [HomeController::class, 'terms_of_use'])->name('term
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::post('auth', [LoginController::class, 'login'])->name('check.login');
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('password/reset', [ForgotPasswordController::class, 'resetPasswordRequestForm'])->name('password.request');
+Route::get('password/email', [ForgotPasswordController::class, 'resetPasswordRequestForm'])->name('password.email');
+Route::post('password/email/request', [ForgotPasswordController::class, 'resetPasswordEmailRequest'])->name('password.email.request');
+Route::get('user/reset-password/{token}/{email}', [ForgotPasswordController::class, 'resetPassword'])->name('reset.password');
+Route::post('user/reset-password', [ForgotPasswordController::class, 'resetPasswordUpdate'])->name('password.update');
+
 
 
 Route::group(['middleware' => 'auth'], function () {

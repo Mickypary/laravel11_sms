@@ -12,6 +12,10 @@
                 <!-- Login card -->
                 <form class="login-form " method="post" action="{{ route('check.login') }}">
                     @csrf
+
+                    
+
+
                     <div class="card mb-0">
                         <div class="card-body">
                             <div class="text-center mb-3">
@@ -20,11 +24,24 @@
                                 <span class="d-block text-muted">Your credentials</span>
                             </div>
 
+                                {{-- For Laravel Validation error didsplay --}}
                                 @if ($errors->any())
                                 <div class="alert alert-danger alert-styled-left alert-dismissible">
                                     <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                                     <span class="font-weight-semibold">Oops!</span> {{ implode('<br>', $errors->all()) }}
                                 </div>
+                                @endif
+
+
+                                    {{-- For session Error display --}}
+                                @if (session('success'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('success') }}
+                                    </div>
+                                @elseif(session('error')) 
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ session('error') }}
+                                    </div>
                                 @endif
 
 
@@ -45,7 +62,7 @@
                                     </label>
                                 </div>
 
-                                <a href="{{ route('password.request') }}" class="ml-auto">Forgot password?</a>
+                                <a href="{{ route('password.email') }}" class="ml-auto">Forgot password?</a>
                             </div>
 
                             <div class="form-group">

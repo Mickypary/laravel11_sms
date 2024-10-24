@@ -7,16 +7,13 @@
     <div class="content d-flex justify-content-center align-items-center">
 
         <!-- Password recovery form -->
-        <form class="login-form" method="POST" action="{{ route('password.email') }}">
+        <form class="login-form" method="POST" action="{{ route('password.email.request') }}">
             @csrf
             <div class="card mb-0">
                 <div class="card-body">
 
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+
+                    
                         @if ($errors->has('email'))
                             <div class="alert alert-danger" role="alert">
                                 {{ $errors->first('email') }}
@@ -28,6 +25,18 @@
                         <h5 class="mb-0">Password recovery</h5>
                         <span class="d-block text-muted">We'll send you instructions in email</span>
                     </div>
+
+
+                    {{-- For session Error display --}}
+                    @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                    @elseif(session('error')) 
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('error') }}
+                        </div>
+                    @endif
 
                     <div class="form-group ">
                         <input name="email" required type="email" class="form-control" value="{{ old('email') }}" placeholder="Your email">
